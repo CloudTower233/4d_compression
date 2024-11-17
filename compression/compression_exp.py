@@ -185,6 +185,7 @@ def run_single_compression(gaussians, experiment_out_path, experiment_config):
     experiment_config['max_sh_degree'] = gaussians.max_sh_degree
     experiment_config['active_sh_degree'] = gaussians.active_sh_degree
     experiment_config['disable_xyz_log_activation'] = gaussians.disable_xyz_log_activation
+    experiment_config['extra_gaussians'] = gaussians.extra_gaussians
     with open(os.path.join(experiment_out_path, "compression_config.yml"), 'w') as stream:
         yaml.dump(experiment_config, stream)
 

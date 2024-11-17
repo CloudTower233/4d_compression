@@ -4,13 +4,16 @@ import imagecodecs
 import numpy as np
 import shutil
 
+frame_num = 300
+
 def copy_images():
     # 设置输入路径和输出文件名
     input_path = os.path.join("output","compression")
     # output_file = '_features_dc.mp4'
     # 获取输入路径下所有图像文件
     image_files = []
-    for t in range(300):
+    print("xyz")
+    for t in range(frame_num):
         compr_path = os.path.join(input_path,f"frame_{t}","PNG 16")
         image_files.append(os.path.join(compr_path,"_xyz.png"))
 
@@ -27,7 +30,8 @@ def copy_images():
     # output_file = '_features_dc.mp4'
     # 获取输入路径下所有图像文件
     image_files = []
-    for t in range(300):
+    print("scaling")
+    for t in range(frame_num):
         compr_path = os.path.join(input_path,f"frame_{t}","PNG 16")
         image_files.append(os.path.join(compr_path,"_scaling.png"))
 
@@ -44,7 +48,8 @@ def copy_images():
     # output_file = '_features_dc.mp4'
     # 获取输入路径下所有图像文件
     image_files = []
-    for t in range(300):
+    print("rotation")
+    for t in range(frame_num):
         compr_path = os.path.join(input_path,f"frame_{t}","PNG 16")
         image_files.append(os.path.join(compr_path,"_rotation.png"))
 
@@ -61,7 +66,8 @@ def copy_images():
     # output_file = '_features_dc.mp4'
     # 获取输入路径下所有图像文件
     image_files = []
-    for t in range(300):
+    print("opacity")
+    for t in range(frame_num):
         compr_path = os.path.join(input_path,f"frame_{t}","PNG 16")
         image_files.append(os.path.join(compr_path,"_opacity.png"))
 
@@ -78,7 +84,8 @@ def copy_images():
     # output_file = '_features_dc.mp4'
     # 获取输入路径下所有图像文件
     image_files = []
-    for t in range(300):
+    print("features_dc")
+    for t in range(frame_num):
         compr_path = os.path.join(input_path,f"frame_{t}","PNG 16")
         image_files.append(os.path.join(compr_path,"_features_dc.png"))
 
@@ -95,7 +102,8 @@ def copy_images():
     # output_file = '_features_dc.mp4'
     # 获取输入路径下所有图像文件
     image_files = []
-    for t in range(300):
+    print("features_rest_r")
+    for t in range(frame_num):
         compr_path = os.path.join(input_path,f"frame_{t}","PNG 16")
         image_files.append(os.path.join(compr_path,"_features_rest_r.png"))
 
@@ -112,7 +120,8 @@ def copy_images():
     # output_file = '_features_dc.mp4'
     # 获取输入路径下所有图像文件
     image_files = []
-    for t in range(300):
+    print("features_rest_g")
+    for t in range(frame_num):
         compr_path = os.path.join(input_path,f"frame_{t}","PNG 16")
         image_files.append(os.path.join(compr_path,"_features_rest_g.png"))
 
@@ -129,7 +138,8 @@ def copy_images():
     # output_file = '_features_dc.mp4'
     # 获取输入路径下所有图像文件
     image_files = []
-    for t in range(300):
+    print("features_rest_b")
+    for t in range(frame_num):
         compr_path = os.path.join(input_path,f"frame_{t}","PNG 16")
         image_files.append(os.path.join(compr_path,"_features_rest_b.png"))
 
@@ -144,6 +154,7 @@ def copy_images():
     print('图片已复制完成')
 
 def copy_csv():
+    print("csv")
     origin_model_path = os.path.join("output","compression")
     config_path = os.path.join(origin_model_path,"frame_0","PNG 16")
     config_path = os.path.join(config_path,"compression_config.yml")
@@ -151,12 +162,13 @@ def copy_csv():
     os.makedirs(os.path.join("coding","config"), exist_ok=True)
     shutil.copy(config_path, output_path)
 
-    for t in range(300):
+    for t in range(frame_num):
         csv_path = os.path.join(origin_model_path,f"frame_{t}","PNG 16")
         csv_path = os.path.join(csv_path, "compression_info.csv")
         output_path = os.path.join("coding","config",f"compression_info_{t}.csv")
         os.makedirs(os.path.join("coding","config"), exist_ok=True)
         shutil.copy(csv_path, output_path)
+
 
     print("参数文件已复制完成")
 

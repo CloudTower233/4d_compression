@@ -32,7 +32,7 @@ def main(cfg: DictConfig):
 
     g_FVV_path = os.path.join("data","flame_steak")
     g_renderer.NTCs = util_3dgstream.load_NTCs(g_FVV_path, g_renderer.gaussians, g_total_frame)
-    g_renderer.additional_3dgs = util_3dgstream.load_Additions(g_FVV_path, g_total_frame)
+    # g_renderer.additional_3dgs = util_3dgstream.load_Additions(g_FVV_path, g_total_frame)
 
     sorted_indices = []
     for timestep in range(g_total_frame):
@@ -50,10 +50,11 @@ def main(cfg: DictConfig):
         frame_gaussians.load_3dgstream(rendered_gaussians)
 
         frame_gaussians.prune_to_square_shape()
+        # frame_gaussians.add_to_square_shape()
         if timestep == 0:
             sorted_indices = frame_gaussians.sort_into_grid(cfg.sorting, not cfg.run.no_progress_bar)
-        else:
-            frame_gaussians.prune_all_but_these_indices(sorted_indices)
+
+        frame_gaussians.prune_all_but_these_indices(sorted_indices)
 
         compr_results = run_compressions(frame_gaussians, compr_path, OmegaConf.to_container(cfg.compression))
         
@@ -62,5 +63,6 @@ def main(cfg: DictConfig):
 
 if __name__ == "__main__":
     main()
+    postprocess()
 
 

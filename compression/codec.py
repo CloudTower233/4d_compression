@@ -33,6 +33,7 @@ max_thresholds = {
     # "_scaling": -1,
     
     # manually overriden, because clipping large scaled gaussians to smaller scales messes up the results big time
+    # "_scaling": 3,
     "_scaling": 3,
     "_rotation": 2,
     "_opacity": 12,

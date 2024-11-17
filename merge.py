@@ -4,13 +4,16 @@ import cv2
 
 def merge():
     # 输入和输出文件夹路径
-    output_folder = ['decoding/_xyz','decoding/_scaling','decoding/_opacity','decoding/_features_dc','decoding/_rotation_rgb','decoding/_rotation_a']
-    input_folder_l = ['decoding/_xyz_l','decoding/_scaling_l','decoding/_opacity_l','decoding/_features_dc_l','decoding/_rotation_l_rgb','decoding/_rotation_l_a']
-    input_folder_h = ['decoding/_xyz_h','decoding/_scaling_h','decoding/_opacity_h','decoding/_features_dc_h','decoding/_rotation_h_rgb','decoding/_rotation_h_a']
+    output_folder = ['decoding/_xyz','decoding/_scaling','decoding/_opacity','decoding/_features_dc','decoding/_rotation_rgb','decoding/_rotation_a',"decoding/_features_rest_r","decoding/_features_rest_g","decoding/_features_rest_b"]
+    input_folder_l = ['decoding/_xyz_l','decoding/_scaling_l','decoding/_opacity_l','decoding/_features_dc_l','decoding/_rotation_l_rgb','decoding/_rotation_l_a',"decoding/_features_rest_r_l","decoding/_features_rest_g_l","decoding/_features_rest_b_l"]
+    input_folder_h = ['decoding/_xyz_h','decoding/_scaling_h','decoding/_opacity_h','decoding/_features_dc_h','decoding/_rotation_h_rgb','decoding/_rotation_h_a',"decoding/_features_rest_r_h","decoding/_features_rest_g_h","decoding/_features_rest_b_h"]
 
+    for path in output_folder:
+        os.makedirs(path, exist_ok=True)
 
     for i in range(len(input_folder_l)):
         # 遍历输入文件夹中的所有 PNG 文件
+        print(input_folder_l[i])
         for filename in os.listdir(input_folder_l[i]):
             if filename.endswith('.png'):  # 仅处理 PNG 文件
                 # 加载 RGBA 图像
@@ -32,6 +35,8 @@ def merge():
     output_folder = 'decoding/_rotation'
     input_folder_rgb = 'decoding/_rotation_rgb'
     input_folder_a = 'decoding/_rotation_a'
+
+    os.makedirs(output_folder, exist_ok=True)
 
     # 遍历输入文件夹中的所有 PNG 文件
     for filename in os.listdir(input_folder_rgb):

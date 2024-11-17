@@ -15,6 +15,7 @@ def split():
 
     for i in range(len(input_folder)):
         # 遍历输入文件夹中的所有 PNG 文件
+        print(input_folder[i])
         for filename in os.listdir(input_folder[i]):
             if filename.endswith('.png'):  # 仅处理 PNG 文件
                 # 加载 RGBA 图像
@@ -39,6 +40,7 @@ def split():
 
     for i in range(len(input_folder)):
         # 遍历输入文件夹中的所有 PNG 文件
+        print(input_folder[i])
         for filename in os.listdir(input_folder[i]):
             if filename.endswith('.png'):  # 仅处理 PNG 文件
                 # 加载 RGBA 图像

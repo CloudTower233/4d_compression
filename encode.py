@@ -10,7 +10,7 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
-        '-pix_fmt', 'gray',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        '-pix_fmt', 'gray',        
         'coding/_opacity_l.mp4'                   # 输出文件名
     ]
     
@@ -36,7 +36,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt", "yuv444p",
         'coding/_rotation_l_rgb.mp4'                   # 输出文件名
     ]
     
@@ -49,7 +51,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
-        '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-crf", "28",
+        # '-pix_fmt', 'yuv444p',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        '-pix_fmt', 'gbrp',
         'coding/_rotation_h_rgb.mp4'                   # 输出文件名
     ]
     
@@ -62,6 +66,7 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28"
         '-pix_fmt', 'gray',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
         'coding/_rotation_l_a.mp4'                   # 输出文件名
     ]
@@ -75,6 +80,7 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28"
         '-pix_fmt', 'gray',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
         'coding/_rotation_h_a.mp4'                   # 输出文件名
     ]
@@ -89,7 +95,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt","yuv444p",
         'coding/_xyz_l.mp4'                   # 输出文件名
     ]
     
@@ -102,7 +110,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt","yuv444p",
         'coding/_xyz_h.mp4'                   # 输出文件名
     ]
     
@@ -115,7 +125,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt","yuv444p",
         'coding/_scaling_l.mp4'                   # 输出文件名
     ]
     
@@ -128,7 +140,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt","yuv444p",
         'coding/_scaling_h.mp4'                   # 输出文件名
     ]
     
@@ -141,7 +155,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt","yuv444p",
         'coding/_features_dc_l.mp4'                   # 输出文件名
     ]
     
@@ -154,7 +170,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt","yuv444p",
         'coding/_features_dc_h.mp4'                   # 输出文件名
     ]
     
@@ -167,7 +185,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt","yuv444p",
         'coding/_features_rest_r_l.mp4'                   # 输出文件名
     ]
     
@@ -180,7 +200,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt","yuv444p",
         'coding/_features_rest_r_h.mp4'                   # 输出文件名
     ]
     
@@ -193,7 +215,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt","yuv444p",
         'coding/_features_rest_g_l.mp4'                   # 输出文件名
     ]
     
@@ -206,7 +230,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt","yuv444p",
         'coding/_features_rest_g_h.mp4'                   # 输出文件名
     ]
     
@@ -219,7 +245,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt","yuv444p",
         'coding/_features_rest_b_l.mp4'                   # 输出文件名
     ]
     
@@ -232,7 +260,9 @@ def encode_images_to_h265():
         '-c:v', 'libx265',            # 使用 H.264 编码器
         '-preset', 'veryslow',        # 使用 'veryslow' 预设，压缩效果最好
         '-x265-params', 'lossless=1',                   # 设置量化参数为 0，保证无损
+        # "-crf", "28",
         '-pix_fmt', 'gbrp',        # 使用 YUV 4:4:4 格式，保留所有颜色信息
+        # "-pix_fmt","yuv444p",
         'coding/_features_rest_b_h.mp4'                   # 输出文件名
     ]
     

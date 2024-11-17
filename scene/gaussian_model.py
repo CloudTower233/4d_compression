@@ -80,6 +80,7 @@ class GaussianModel:
         self.percent_dense = 0
         self.spatial_lr_scale = 0
         self.disable_xyz_log_activation = disable_xyz_log_activation
+        self.extra_gaussians = 0
         self.setup_functions()
 
     def capture(self):
@@ -148,6 +149,18 @@ class GaussianModel:
     @property
     def get_opacity(self):
         return self.opacity_activation(self._opacity)
+    
+    @property
+    def get_features_rest_r(self):
+        return self._features_rest_r
+    
+    @property
+    def get_features_rest_g(self):
+        return self._features_rest_g
+    
+    @property
+    def get_features_rest_b(self):
+        return self._features_rest_b
 
     def get_attr_flat(self, attr_name):
         attr = getattr(self, f"_{attr_name}")
@@ -224,9 +237,9 @@ class GaussianModel:
         for i in range(self._features_dc.shape[1]*self._features_dc.shape[2]):
             l.append('f_dc_{}'.format(i))
 
-        if self.active_sh_degree > 0:
-            for i in range(self._features_rest.shape[1]*self._features_rest.shape[2]):
-               l.append('f_rest_{}'.format(i))
+        # if self.active_sh_degree > 0:
+        for i in range(self._features_rest.shape[1]*self._features_rest.shape[2]):
+            l.append('f_rest_{}'.format(i))
         l.append('opacity')
         for i in range(self._scaling.shape[1]):
             l.append('scale_{}'.format(i))
@@ -240,21 +253,23 @@ class GaussianModel:
         xyz = self.get_xyz.detach().cpu().numpy()
         normals = np.zeros_like(xyz)
         f_dc = self._features_dc.detach().transpose(1, 2).flatten(start_dim=1).contiguous().cpu().numpy()
-        if self.active_sh_degree != 0:
-            f_rest = self._features_rest.detach().transpose(1, 2).flatten(start_dim=1).contiguous().cpu().numpy()
+        # if self.active_sh_degree != 0:
+        f_rest = self._features_rest.detach().transpose(1, 2).flatten(start_dim=1).contiguous().cpu().numpy()
         opacities = self._opacity.detach().cpu().numpy()
         scale = self._scaling.detach().cpu().numpy()
         rotation = self._rotation.detach().cpu().numpy()
+        # opacities = inverse_sigmoid(self._opacity).detach().cpu().numpy()
+        # scale = torch.log(self._scaling).detach().cpu().numpy()
 
         dtype_full = [(attribute, 'f4') for attribute in self.construct_list_of_attributes()]
 
         elements = np.empty(xyz.shape[0], dtype=dtype_full)
 
         # TODO: may need to add empty shs for SIBR_viewer?
-        if self.active_sh_degree > 0:
-            attributes = np.concatenate((xyz, normals, f_dc, f_rest, opacities, scale, rotation), axis=1)
-        else:
-            attributes = np.concatenate((xyz, normals, f_dc, opacities, scale, rotation), axis=1)
+        # if self.active_sh_degree > 0:
+        attributes = np.concatenate((xyz, normals, f_dc, f_rest, opacities, scale, rotation), axis=1)
+        # else:
+            # attributes = np.concatenate((xyz, normals, f_dc, opacities, scale, rotation), axis=1)
         elements[:] = list(map(tuple, attributes))
         el = PlyElement.describe(elements, 'vertex')
         PlyData([el]).write(path)
@@ -487,7 +502,7 @@ class GaussianModel:
             indices = indices.cuda()
             self._xyz = self._xyz[indices]
             self._features_dc = self._features_dc[indices]
-            # self._features_rest = self._features_rest[indices]
+            self._features_rest = self._features_rest[indices]
             self._features_rest_r = self._features_rest_r[indices]
             self._features_rest_g = self._features_rest_g[indices]
             self._features_rest_b = self._features_rest_b[indices]
@@ -516,6 +531,79 @@ class GaussianModel:
             sorted_keep_indices = torch.sort(keep_indices)[0]
             self.prune_all_but_these_indices(sorted_keep_indices)
 
+    
+    def prune_to_origin(self, num_removed, sort_by_opacity=True, verbose=True):
+        num_gaussians = self._xyz.shape[0]
+
+        if verbose:
+            print(f"Removing {num_removed}/{num_gaussians} gaussians")
+        if sort_by_opacity:
+            alpha = self.get_opacity[:, 0]
+            _, keep_indices = torch.topk(alpha, k=num_gaussians - num_removed)
+        else:
+            shuffled_indices = torch.randperm(num_gaussians)
+            keep_indices = shuffled_indices[:num_gaussians - num_removed]
+        sorted_keep_indices = torch.sort(keep_indices)[0]
+        self.prune_all_but_these_indices(sorted_keep_indices)
+
+    def add_to_square_shape(self):
+        num_gaussians = self._xyz.shape[0]
+
+        self.grid_sidelen = int(np.sqrt(num_gaussians))
+        if(self.grid_sidelen%2==1):
+            self.grid_sidelen = self.grid_sidelen + 1
+
+        num_added = self.grid_sidelen * self.grid_sidelen - num_gaussians
+        self.extra_gaussians = num_added
+
+        print(f"Adding {num_added}/{num_gaussians} gaussians to fit the grid. ({100 * num_added / num_gaussians:.4f}%)")
+
+        shape = list(self._xyz.shape)
+        shape[0] = num_added
+        new_xyz = torch.zeros(shape).cuda()
+        self._xyz = torch.cat((self._xyz, new_xyz), dim = 0)
+
+        shape = list(self._opacity.shape)
+        shape[0] = num_added
+        new_opacity = torch.zeros(shape).cuda()
+        self._opacity = torch.cat((self._opacity, new_opacity), dim = 0)
+
+        shape = list(self._scaling.shape)
+        shape[0] = num_added
+        new_scaling = torch.zeros(shape).cuda()
+        self._scaling = torch.cat((self._scaling, new_scaling), dim = 0)
+
+        shape = list(self._rotation.shape)
+        shape[0] = num_added
+        new_rotation = torch.zeros(shape).cuda()
+        self._rotation = torch.cat((self._rotation, new_rotation), dim = 0)
+
+        shape = list(self._features_dc.shape)
+        shape[0] = num_added
+        new_features_dc = torch.zeros(shape).cuda()
+        self._features_dc = torch.cat((self._features_dc, new_features_dc), dim = 0)
+
+        shape = list(self._features_rest.shape)
+        shape[0] = num_added
+        new_features_rest = torch.zeros(shape).cuda()
+        self._features_rest = torch.cat((self._features_rest, new_features_rest), dim = 0)
+
+        shape = list(self._features_rest_r.shape)
+        shape[0] = num_added
+        new_features_rest_r = torch.zeros(shape).cuda()
+        self._features_rest_r = torch.cat((self._features_rest_r, new_features_rest_r), dim = 0)
+
+        shape = list(self._features_rest_g.shape)
+        shape[0] = num_added
+        new_features_rest_g = torch.zeros(shape).cuda()
+        self._features_rest_g = torch.cat((self._features_rest_g, new_features_rest_g), dim = 0)
+
+        shape = list(self._features_rest_b.shape)
+        shape[0] = num_added
+        new_features_rest_b = torch.zeros(shape).cuda()
+        self._features_rest_b = torch.cat((self._features_rest_b, new_features_rest_b), dim = 0)
+        
+        
     @staticmethod
     def normalize(tensor):
         tensor = tensor - tensor.mean()
@@ -548,7 +636,7 @@ class GaussianModel:
         if sorting_cfg.shuffle:
             sorted_indices = shuffled_indices[sorted_indices]
         
-        self.prune_all_but_these_indices(sorted_indices)
+        # self.prune_all_but_these_indices(sorted_indices)
         return sorted_indices
 
     def as_grid_img(self, tensor):
@@ -640,4 +728,15 @@ class GaussianModel:
         self._scaling = gau.scale
         self._rotation = gau.rot
         self._opacity = gau.opacity
+
+        self._opacity = inverse_sigmoid(self._opacity)
+        self._scaling = torch.log(self._scaling)
+
         return
+    
+    def merge_features(self):
+        self._features_rest_r = self._features_rest_r.unsqueeze(-2)
+        self._features_rest_g = self._features_rest_g.unsqueeze(-2)
+        self._features_rest_b = self._features_rest_b.unsqueeze(-2)
+        self._features_rest = torch.cat((self._features_rest_r,self._features_rest_g,self._features_rest_b),dim=-2)
+        self._features_dc = self._features_dc.unsqueeze(-2)
